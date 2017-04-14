@@ -20,7 +20,6 @@ import java.net.URL;
 import java.util.Collections;
 import java.util.Properties;
 import java.util.Set;
-
 import org.apache.aries.blueprint.ComponentDefinitionRegistry;
 import org.apache.aries.blueprint.NamespaceHandler;
 import org.apache.aries.blueprint.NamespaceHandler2;
@@ -42,6 +41,7 @@ import org.springframework.beans.factory.parsing.NullSourceExtractor;
 import org.springframework.beans.factory.parsing.ProblemReporter;
 import org.springframework.beans.factory.parsing.ReaderEventListener;
 import org.springframework.beans.factory.parsing.SourceExtractor;
+import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.BeanDefinitionParserDelegate;
 import org.springframework.beans.factory.xml.NamespaceHandlerResolver;
@@ -236,7 +236,7 @@ public class BlueprintNamespaceHandler implements NamespaceHandler, NamespaceHan
 
     private org.springframework.beans.factory.xml.ParserContext createSpringParserContext(ParserContext parserContext, DefaultListableBeanFactory registry) {
         try {
-            XmlBeanDefinitionReader xbdr = new XmlBeanDefinitionReader(registry);
+            SpringVersionBridgeXmlBeanDefinitionReader xbdr = new SpringVersionBridgeXmlBeanDefinitionReader(registry);
             Resource resource = new UrlResource(parserContext.getSourceNode().getOwnerDocument().getDocumentURI());
             ProblemReporter problemReporter = new FailFastProblemReporter();
             ReaderEventListener listener = new EmptyReaderEventListener();
@@ -255,4 +255,19 @@ public class BlueprintNamespaceHandler implements NamespaceHandler, NamespaceHan
     }
 
 
+    /**
+     * Some methods are protected in Spring 3.x, hence overridden methods in this class to make them available.
+     */
+    private class SpringVersionBridgeXmlBeanDefinitionReader extends XmlBeanDefinitionReader {
+        
+        public SpringVersionBridgeXmlBeanDefinitionReader(final BeanDefinitionRegistry registry) {
+            super(registry);
+        }
+
+        @Override
+        public XmlReaderContext createReaderContext(final Resource resource) {
+            return super.createReaderContext(resource);
+        }
+    }
+    
 }

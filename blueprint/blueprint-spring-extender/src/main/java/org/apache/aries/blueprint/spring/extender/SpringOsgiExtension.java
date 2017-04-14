@@ -16,8 +16,6 @@
  */
 package org.apache.aries.blueprint.spring.extender;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,7 +28,8 @@ import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.apache.aries.blueprint.services.BlueprintExtenderService;
 import org.apache.felix.utils.extender.Extension;
 import org.osgi.framework.Bundle;
@@ -99,7 +98,7 @@ public class SpringOsgiExtension implements Extension {
             writer.write("<blueprint xmlns=\"http://www.osgi.org/xmlns/blueprint/v1.0.0\"\n");
             writer.write("\txmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n");
             writer.write("\txmlns:bean=\"http://www.springframework.org/schema/beans\"\n");
-            writer.write("\txsi:schemaLocation=\"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd\">\n");
+            writer.write("\txsi:schemaLocation=\"http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-" + SpringXsdVersionResolver.resolve() + ".xsd\">\n");
             for (URL url : paths) {
                 writer.write("\t<bean:import resource=\"" + url.toString() + "\"/>\n");
             }
